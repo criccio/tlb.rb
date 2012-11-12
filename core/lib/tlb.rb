@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'open4'
+require 'open5'
 require File.join('net', 'http')
 require 'timeout'
 
@@ -202,7 +203,10 @@ module Tlb
 
   class ForkBalancerProcess < BalancerProcess
     def start server_command
-      @pid, input, out, err = Open4.popen4(server_command)
+      #@pid, input, out, err = Open4.popen4(server_command)
+      input,err,out, @t= open5(server_command)
+      @pid=@t.pid
+
       unless (out)
         raise "out was nil"
       end
